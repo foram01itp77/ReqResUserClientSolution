@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ReqResUserClient.Configuration;
 using ReqResUserClient.Interfaces;
 using ReqResUserClient.Services;
-using Polly.Extensions.Http;
+using Polly;
 
 
 
@@ -18,10 +18,10 @@ namespace ReqResUserClient.Extensions
     {
         public static IServiceCollection AddReqResClient(this IServiceCollection services)
         {
-             services.AddHttpClient<ReqResApiClient>();
-     //       services.AddHttpClient<ReqResApiClient>()
-     //.AddTransientHttpErrorPolicy(policy =>
-     //    policy.WaitAndRetryAsync(3, retry => TimeSpan.FromSeconds(Math.Pow(2, retry))));
+            // services.AddHttpClient<ReqResApiClient>();
+            services.AddHttpClient<ReqResApiClient>()
+     .AddTransientHttpErrorPolicy(policy =>
+         policy.WaitAndRetryAsync(3, retry => TimeSpan.FromSeconds(Math.Pow(2, retry))));
 
             services.AddScoped<IExternalUserService, ExternalUserService>();
             return services;
